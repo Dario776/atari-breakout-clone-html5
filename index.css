@@ -18,6 +18,4 @@ body {
 canvas {
   display: block;
   border: 5px solid white;
-  max-width: 95vw;
-  max-height: 95vh;
 }
