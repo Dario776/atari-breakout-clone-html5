@@ -329,12 +329,11 @@ let pressed;
 let frameId;
 
 function Init() {
-  maxPoints = window.localStorage.getItem("points");
-  if (!maxPoints) maxPoints = 0;
+  frameId = null;
+  maxPoints = window.localStorage.getItem("points") || 0;
   points = 0;
   isWinner = false;
-
-  if (frameId) GameOver();
+  bricks = []; 
 
   player = new Player(
     canvas.width / 2 - PLAYER_WIDTH / 2,
@@ -411,10 +410,13 @@ function GameOver() {
 }
 
 function RestartGame() {
-  Init();
-  Animate();
-  isGameRunning = true;
+  if (!isGameRunning) {
+    Init();     
+    Animate();   
+    isGameRunning = true;
+  }
 }
+
 
 window.addEventListener("keydown", (event) => {
   if (isGameRunning)
