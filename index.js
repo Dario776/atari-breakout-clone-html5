@@ -2,8 +2,8 @@ const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
 const FPS = 60;
-canvas.height = 1000;
-canvas.width = 1000;
+canvas.height = 800;
+canvas.width = 800;
 
 class Player {
   constructor(x, y, width, height, color, speed) {
@@ -106,16 +106,33 @@ class Ball {
           this.velocity.y = -this.velocity.y;
         }
 
-        const hitCorner = Math.abs(overlapX - overlapY) < 2;
+        const hitCorner = Math.abs(overlapX - overlapY) < 15;
 
         if (hitCorner) {
+          let diff=0;
+          if(bricks.length<40)
+            diff = 0.2;
+          if(bricks.length<30)
+            diff = 0.3;
+          if(bricks.length<20)
+            diff = 0.4;
+          if(bricks.length<10)
+            diff = 0.6;
+          if(bricks.length<3)
+            diff = 0.9;
+
+          // console.log("DIF  "+diff);
+          // console.log("VEL1  "+this.velocity.x );
+
           const randomVelocity =
             Math.random() * (this.maxVelocity - this.minVelocity) +
-            this.minVelocity;
+            this.minVelocity+diff*this.maxVelocity;
 
           const speed = Math.hypot(this.velocity.x, this.velocity.y);
           this.velocity.x = (this.velocity.x / speed) * randomVelocity;
           this.velocity.y = (this.velocity.y / speed) * randomVelocity;
+
+          // console.log("VEL2  "+this.velocity.x );
         }
 
         brickToRemove = brick;
@@ -306,15 +323,15 @@ BRICK_COLOR = [
   "rgb(0, 255, 0)",
   "rgb(255, 255, 153)",
 ];
-BRICK_WIDTH = 0.063 * canvas.width;
+BRICK_WIDTH = 0.05875 * canvas.width;
 BRICK_HEIGHT = 0.04 * canvas.height;
 BRICK_SPACING = 30;
 
 BALL_SIZE = 0.04 * canvas.height;
 BALL_COLOR = "grey";
-BALL_START_SPEED = canvas.height / 200;
-BALL_MIN_SPEED = canvas.height / 300;
-BALL_MAX_SPEED = canvas.height / 100;
+BALL_START_SPEED = canvas.height / 180;
+BALL_MIN_SPEED = canvas.height / 230;
+BALL_MAX_SPEED = canvas.height / 110;
 
 TOPDOWN_SPACING = 80;
 
@@ -356,19 +373,19 @@ function Init() {
   );
 
   const startPos = {
-    x: 50,
+    x: 30,
     y: TOPDOWN_SPACING,
   };
 
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 0; i < 5; i++) {
     for (let j = 0; j < 10; j++) {
       bricks.push(
         new Brick(
           startPos.x + j * (BRICK_WIDTH + BRICK_SPACING),
-          startPos.y * i + TOPDOWN_SPACING - BRICK_WIDTH,
+          startPos.y * i + 100 - BRICK_HEIGHT,
           BRICK_WIDTH,
           BRICK_HEIGHT,
-          BRICK_COLOR[i - 1]
+          BRICK_COLOR[i]
         )
       );
     }
